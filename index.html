@@ -125,6 +125,24 @@ section.block{padding:96px 0}
 .mail-card .eyebrow{margin-bottom:18px}
 .mail-card .mail{font-family:'Space Grotesk';font-size:clamp(22px,3vw,30px);font-weight:700;background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;word-break:break-all}
 .mail-card .btn{margin-top:26px}
+.form-card{background:linear-gradient(160deg,#1b1b24,#0d0d12);border:1px solid var(--line);border-radius:24px;padding:36px}
+.form-card .eyebrow{margin-bottom:22px;display:flex;align-items:center;gap:8px}
+.field{margin-bottom:16px}
+.field label{display:block;font-family:'Space Grotesk';font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:13px 15px;color:var(--txt);font-family:inherit;font-size:15px;transition:.2s;box-sizing:border-box}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent2)}
+.field textarea{resize:vertical;min-height:120px}
+.field select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) center,calc(100% - 14px) center;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+.form-card .btn{width:100%;justify-content:center;margin-top:6px;cursor:pointer;border:none;font-size:15px}
+.form-note{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}
+.popup-overlay{position:fixed;inset:0;background:rgba(5,5,8,.72);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:9999;opacity:0;visibility:hidden;transition:.25s}
+.popup-overlay.show{opacity:1;visibility:visible}
+.popup-box{background:linear-gradient(160deg,#1b1b24,#0d0d12);border:1px solid var(--line);border-radius:24px;padding:40px 36px;max-width:400px;width:90%;text-align:center;transform:translateY(14px) scale(.97);transition:.25s}
+.popup-overlay.show .popup-box{transform:translateY(0) scale(1)}
+.popup-icon{width:64px;height:64px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:32px}
+.popup-box h3{font-family:'Space Grotesk';font-size:22px;margin:0 0 10px}
+.popup-box p{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 26px}
+.popup-box .btn{width:100%;justify-content:center;cursor:pointer;border:none;font-size:15px}
 
 /* FOOTER */
 footer{padding:54px 0 40px;border-top:1px solid var(--line)}
@@ -300,9 +318,9 @@ footer{padding:54px 0 40px;border-top:1px solid var(--line)}
       <p>이제 막 시작한 10명의 작은 팀입니다. 부족한 만큼 빠르게 배우고, 함께 만들어갈 열정 있는 동료를 기다립니다.</p>
     </div>
     <div class="jobs">
-      <div class="job"><div><h3>Unity 게임 프로그래머</h3><p>게임 플레이 시스템 구현 · 정규/경력 무관</p></div><a class="apply" href="mailto:lascadia@naver.com?subject=[채용]%20Unity%20게임%20프로그래머%20지원">지원하기</a></div>
-      <div class="job"><div><h3>게임 기획자</h3><p>콘텐츠 기획 · 레벨 디자인 · 신입 환영</p></div><a class="apply" href="mailto:lascadia@naver.com?subject=[채용]%20게임%20기획자%20지원">지원하기</a></div>
-      <div class="job"><div><h3>2D 아트 / 그래픽 디자이너</h3><p>캐릭터 · UI · 프로모션 아트 · 포트폴리오 필수</p></div><a class="apply" href="mailto:lascadia@naver.com?subject=[채용]%20아트%20디자이너%20지원">지원하기</a></div>
+      <div class="job"><div><h3>Unity 게임 프로그래머</h3><p>게임 플레이 시스템 구현 · 정규/경력 무관</p></div></div>
+      <div class="job"><div><h3>게임 기획자</h3><p>콘텐츠 기획 · 레벨 디자인 · 신입 환영</p></div></div>
+      <div class="job"><div><h3>2D 아트 / 그래픽 디자이너</h3><p>캐릭터 · UI · 프로모션 아트 · 포트폴리오 필수</p></div></div>
     </div>
   </div>
 </section>
@@ -321,11 +339,35 @@ footer{padding:54px 0 40px;border-top:1px solid var(--line)}
           <li><div class="ico">💬</div><div><small>Business</small><span class="v">Partnership &amp; Publishing</span></div></li>
         </ul>
       </div>
-      <div class="mail-card">
-        <span class="eyebrow">Say Hello</span>
-        <div class="mail">lascadia@naver.com</div>
-        <a href="mailto:lascadia@naver.com" class="btn btn-primary">메일 보내기 →</a>
-      </div>
+      <form class="form-card" id="inquiry-form">
+        <span class="eyebrow">✈️ 문의 남기기</span>
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="field">
+          <label for="if-name">이름 / 회사명 <span style="color:var(--accent2)">*</span></label>
+          <input type="text" id="if-name" name="name" required placeholder="홍길동 / 라스카디아">
+        </div>
+        <div class="field">
+          <label for="if-email">이메일 <span style="color:var(--accent2)">*</span></label>
+          <input type="email" id="if-email" name="email" required placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="if-type">문의 유형</label>
+          <select id="if-type" name="type">
+            <option>사업 협력</option>
+            <option>퍼블리싱</option>
+            <option>개발자 채용 - Unity 게임 프로그래머</option>
+            <option>개발자 채용 - 게임 기획자</option>
+            <option>개발자 채용 - 2D 아트 / 그래픽 디자이너</option>
+            <option>기타 문의</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="if-msg">내용 <span style="color:var(--accent2)">*</span></label>
+          <textarea id="if-msg" name="message" required placeholder="문의 내용을 자유롭게 적어주세요."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">✈️ 문의 보내기</button>
+        <p class="form-note">* 제출 시 별도의 메일 앱 없이 lascadia@naver.com 으로 바로 전송됩니다.</p>
+      </form>
     </div>
   </div>
 </section>
@@ -346,6 +388,69 @@ footer{padding:54px 0 40px;border-top:1px solid var(--line)}
     </div>
   </div>
 </footer>
+
+<div class="popup-overlay" id="success-popup">
+  <div class="popup-box">
+    <div class="popup-icon">✉️</div>
+    <h3>문의가 전송되었습니다!</h3>
+    <p>소중한 문의 감사합니다.<br>메일 앱을 통해 라스카디아로 전달됩니다.<br>빠른 시일 내 답변드리겠습니다.</p>
+    <button type="button" class="btn btn-primary" id="popup-close">확인</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('inquiry-form');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = form.name.value.trim();
+    var email = form.email.value.trim();
+    var type = form.type.value;
+    var message = form.message.value.trim();
+    var btn = form.querySelector('button[type="submit"]');
+    var origLabel = btn ? btn.innerHTML : '';
+    if(btn){ btn.disabled = true; btn.innerHTML = '전송 중...'; }
+
+    var payload = {
+      _subject: '[문의] ' + type + ' - ' + name,
+      _template: 'table',
+      _captcha: 'false',
+      name: name,
+      email: email,
+      '문의 유형': type,
+      message: message
+    };
+
+    fetch('https://formsubmit.co/ajax/lascadia@naver.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if(btn){ btn.disabled = false; btn.innerHTML = origLabel; }
+      if(data && (data.success === true || data.success === 'true')){
+        var popup = document.getElementById('success-popup');
+        if(popup) popup.classList.add('show');
+        form.reset();
+      } else {
+        alert('전송에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+      }
+    })
+    .catch(function(){
+      if(btn){ btn.disabled = false; btn.innerHTML = origLabel; }
+      alert('네트워크 오류로 전송하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+    });
+  });
+  var popup = document.getElementById('success-popup');
+  var closeBtn = document.getElementById('popup-close');
+  function hidePopup(){ if(popup) popup.classList.remove('show'); }
+  if(closeBtn) closeBtn.addEventListener('click', hidePopup);
+  if(popup) popup.addEventListener('click', function(e){ if(e.target === popup) hidePopup(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') hidePopup(); });
+})();
+</script>
 
 </body>
 </html>
