@@ -339,12 +339,16 @@ footer{padding:54px 0 40px;border-top:1px solid var(--line)}
           <li><div class="ico">💬</div><div><small>Business</small><span class="v">Partnership &amp; Publishing</span></div></li>
         </ul>
       </div>
-      <form class="form-card" id="inquiry-form">
+      <form class="form-card" id="inquiry-form" action="https://formsubmit.co/lascadia@naver.com" method="POST">
         <span class="eyebrow">✈️ 문의 남기기</span>
-        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+        <input type="hidden" name="_subject" value="[라스카디아 홈페이지] 새 문의가 도착했습니다">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://lascadia.github.io/?sent=1">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div class="field">
           <label for="if-name">이름 / 회사명 <span style="color:var(--accent2)">*</span></label>
-          <input type="text" id="if-name" name="name" required placeholder="홍길동 / 라스카디아">
+          <input type="text" id="if-name" name="이름_회사명" required placeholder="홍길동 / 라스카디아">
         </div>
         <div class="field">
           <label for="if-email">이메일 <span style="color:var(--accent2)">*</span></label>
@@ -352,7 +356,7 @@ footer{padding:54px 0 40px;border-top:1px solid var(--line)}
         </div>
         <div class="field">
           <label for="if-type">문의 유형</label>
-          <select id="if-type" name="type">
+          <select id="if-type" name="문의유형">
             <option>사업 협력</option>
             <option>퍼블리싱</option>
             <option>개발자 채용 - Unity 게임 프로그래머</option>
@@ -363,10 +367,10 @@ footer{padding:54px 0 40px;border-top:1px solid var(--line)}
         </div>
         <div class="field">
           <label for="if-msg">내용 <span style="color:var(--accent2)">*</span></label>
-          <textarea id="if-msg" name="message" required placeholder="문의 내용을 자유롭게 적어주세요."></textarea>
+          <textarea id="if-msg" name="문의내용" required placeholder="문의 내용을 자유롭게 적어주세요."></textarea>
         </div>
         <button type="submit" class="btn btn-primary">✈️ 문의 보내기</button>
-        <p class="form-note">* 제출 시 별도의 메일 앱 없이 lascadia@naver.com 으로 바로 전송됩니다.</p>
+        <p class="form-note">* 버튼을 누르면 별도 메일 앱 없이 라스카디아로 바로 전송됩니다.</p>
       </form>
     </div>
   </div>
@@ -400,55 +404,20 @@ footer{padding:54px 0 40px;border-top:1px solid var(--line)}
 
 <script>
 (function(){
-  var form = document.getElementById('inquiry-form');
-  if(!form) return;
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    var name = form.name.value.trim();
-    var email = form.email.value.trim();
-    var type = form.type.value;
-    var message = form.message.value.trim();
-    var btn = form.querySelector('button[type="submit"]');
-    var origLabel = btn ? btn.innerHTML : '';
-    if(btn){ btn.disabled = true; btn.innerHTML = '전송 중...'; }
-
-    var payload = {
-      _subject: '[문의] ' + type + ' - ' + name,
-      _template: 'table',
-      _captcha: 'false',
-      name: name,
-      email: email,
-      '문의 유형': type,
-      message: message
-    };
-
-    fetch('https://formsubmit.co/ajax/lascadia@naver.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    .then(function(res){ return res.json(); })
-    .then(function(data){
-      if(btn){ btn.disabled = false; btn.innerHTML = origLabel; }
-      if(data && (data.success === true || data.success === 'true')){
-        var popup = document.getElementById('success-popup');
-        if(popup) popup.classList.add('show');
-        form.reset();
-      } else {
-        alert('전송에 실패했습니다. 잠시 후 다시 시도해 주세요.');
-      }
-    })
-    .catch(function(){
-      if(btn){ btn.disabled = false; btn.innerHTML = origLabel; }
-      alert('네트워크 오류로 전송하지 못했습니다. 잠시 후 다시 시도해 주세요.');
-    });
-  });
   var popup = document.getElementById('success-popup');
   var closeBtn = document.getElementById('popup-close');
   function hidePopup(){ if(popup) popup.classList.remove('show'); }
   if(closeBtn) closeBtn.addEventListener('click', hidePopup);
   if(popup) popup.addEventListener('click', function(e){ if(e.target === popup) hidePopup(); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') hidePopup(); });
+
+  // FormSubmit 전송 완료 후 (?sent=1) 돌아오면 성공 팝업 표시
+  if(window.location.search.indexOf('sent=1') !== -1){
+    if(popup) popup.classList.add('show');
+    if(window.history && window.history.replaceState){
+      window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+    }
+  }
 })();
 </script>
 
